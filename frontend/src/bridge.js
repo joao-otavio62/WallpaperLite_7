@@ -28,7 +28,7 @@ export function call(type, payload) {
 // ---- mock para desenvolver a UI sem o C# ----
 const demo = {
   items: [], activeId: null, paused: false, autoPaused: false,
-  desktopIconsVisible: true, taskbarVisible: true,
+  desktopIconsVisible: true, taskbarVisible: true, clockEnabled: false,
 };
 async function mock(type, p) {
   const emit = () => listeners.forEach((fn) => fn({ event: 'state', data: structuredClone(demo) }));
@@ -41,6 +41,7 @@ async function mock(type, p) {
   if (type === 'togglePause') demo.paused = !demo.paused;
   if (type === 'toggleDesktopIcons') demo.desktopIconsVisible = !demo.desktopIconsVisible;
   if (type === 'toggleTaskbar') demo.taskbarVisible = !demo.taskbarVisible;
+  if (type === 'setClockEnabled') demo.clockEnabled = Boolean(p.enabled);
   if (type !== 'getState') emit();
   return structuredClone(demo);
 }

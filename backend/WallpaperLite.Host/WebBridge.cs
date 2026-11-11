@@ -52,6 +52,7 @@ public sealed class WebBridge : IDisposable
             paused = w.ManualPaused,
             autoPaused = w.AutoPaused,
             autoReason = w.AutoReason,
+            clockEnabled = w.ClockEnabled,
             desktopIconsVisible = _s.Desktop.DesktopIconsVisible,
             taskbarVisible = _s.Desktop.TaskbarVisible,
         };
@@ -80,6 +81,7 @@ public sealed class WebBridge : IDisposable
                 case "togglePause": w.ToggleManualPause(); break;
                 case "toggleDesktopIcons": _s.Desktop.ToggleDesktopIcons(); break;
                 case "toggleTaskbar": _s.Desktop.ToggleTaskbar(); break;
+                case "setClockEnabled": w.SetClockEnabled(BoolArg(root, "enabled")); break;
                 default: throw new InvalidOperationException("Comando desconhecido.");
             }
             Post(new { id, ok = true, data });
@@ -99,6 +101,9 @@ public sealed class WebBridge : IDisposable
 
     static string Arg(JsonElement root, string name) =>
         root.GetProperty("payload").GetProperty(name).GetString() ?? "";
+
+    static bool BoolArg(JsonElement root, string name) =>
+        root.GetProperty("payload").GetProperty(name).GetBoolean();
 
     Task ImportLocal()
     {

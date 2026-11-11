@@ -3,7 +3,7 @@ import { call, onEvent, isDemo } from './bridge';
 import './styles.css';
 
 export default function App() {
-  const [st, setSt] = useState({ items: [], activeId: null, paused: false, autoPaused: false });
+  const [st, setSt] = useState({ items: [], activeId: null, paused: false, autoPaused: false, clockEnabled: false });
   const [url, setUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -64,6 +64,15 @@ export default function App() {
       </section>
       <section className="desktop-settings" aria-label="Configurações da área de trabalho">
         <h2>Área de trabalho</h2>
+        <label className="clock-toggle">
+          <input
+            type="checkbox"
+            checked={Boolean(st.clockEnabled)}
+            onChange={(e) => run(() => call('setClockEnabled', { enabled: e.target.checked }))}
+            disabled={busy}
+          />
+          <span>Mostrar relógio sobre o wallpaper</span>
+        </label>
         <div className="actions">
           <button onClick={() => run(() => call('toggleDesktopIcons'))} disabled={busy}>
             {st.desktopIconsVisible === false ? 'Mostrar ícones da área de trabalho' : 'Ocultar ícones da área de trabalho'}

@@ -29,6 +29,7 @@ public sealed class AnimatedWallpaperWindow
     }
 
     readonly string _path;
+    readonly Func<IntPtr> _clockHandle;
     readonly ManualResetEventSlim _run = new(true);
     readonly CancellationTokenSource _cts = new();
     readonly object _gate = new();
@@ -39,7 +40,11 @@ public sealed class AnimatedWallpaperWindow
 
     static bool Gdi => Native.Renderer == 2;
 
-    public AnimatedWallpaperWindow(string path) => _path = path;
+    public AnimatedWallpaperWindow(string path, Func<IntPtr> clockHandle)
+    {
+        _path = path;
+        _clockHandle = clockHandle;
+    }
 
     public void SetPaused(bool paused) { if (paused) _run.Reset(); else _run.Set(); }
 
@@ -81,12 +86,19 @@ public sealed class AnimatedWallpaperWindow
 
         if (parent == IntPtr.Zero)
         {
-            var handles = Array.ConvertAll(_surfaces, surface => surface.Hwnd);
             _guard = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1.5) };
-            _guard.Tick += (_, _) => Native.KeepAboveProgman(handles);
+            _guard.Tick += (_, _) => KeepAboveDesktop(_clockHandle());
             _guard.Start();
         }
         Task.Run(() => Loop(_cts.Token));
+    }
+
+    public void KeepAboveDesktop(IntPtr clockHandle)
+    {
+        var windows = new List<IntPtr>(_surfaces.Length + (clockHandle == IntPtr.Zero ? 0 : 1));
+        if (clockHandle != IntPtr.Zero) windows.Add(clockHandle);
+        foreach (var surface in _surfaces) windows.Add(surface.Hwnd);
+        Native.KeepAboveProgman(windows.ToArray());
     }
 
     static IntPtr PassThrough(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

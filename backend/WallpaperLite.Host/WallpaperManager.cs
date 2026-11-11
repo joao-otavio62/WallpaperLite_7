@@ -15,8 +15,10 @@ public sealed class WallpaperManager : IDisposable
 {
     static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { WriteIndented = true };
     readonly string _libFile = Path.Combine(AppPaths.Root, "library.json");
+    readonly string _clockFile = Path.Combine(AppPaths.Root, "clock-enabled.txt");
     readonly string? _original = Native.GetCurrentWallpaper();
     AnimatedWallpaperWindow? _anim;
+    DesktopClockWindow? _clock;
 
     public List<WallpaperItem> Items { get; private set; } = new();
     public string? ActiveId { get; private set; }
@@ -24,17 +26,23 @@ public sealed class WallpaperManager : IDisposable
     public string? AutoReason { get; private set; }
     public bool AutoPaused => AutoReason != null;
     public bool HasAnimated => _anim != null;
+    public bool ClockEnabled { get; private set; }
     public event Action? Changed;
 
     public WallpaperManager()
     {
+        try { ClockEnabled = bool.TryParse(File.ReadAllText(_clockFile), out var enabled) && enabled; }
+        catch (IOException) { }
         try
         {
-            if (!File.Exists(_libFile)) return;
-            var lib = JsonSerializer.Deserialize<LibraryFile>(File.ReadAllText(_libFile), Json);
-            if (lib != null) { Items = lib.Items ?? new(); ActiveId = lib.ActiveId; }
+            if (File.Exists(_libFile))
+            {
+                var lib = JsonSerializer.Deserialize<LibraryFile>(File.ReadAllText(_libFile), Json);
+                if (lib != null) { Items = lib.Items ?? new(); ActiveId = lib.ActiveId; }
+            }
         }
         catch (JsonException) { }
+        if (ClockEnabled) _clock = new DesktopClockWindow(KeepClockAboveDesktop);
     }
 
     // ---------- importação ----------
@@ -99,8 +107,9 @@ public sealed class WallpaperManager : IDisposable
         CloseAnimated();
         if (it.Kind == "gif")
         {
-            _anim = new AnimatedWallpaperWindow(path);
+            _anim = new AnimatedWallpaperWindow(path, () => _clock?.Handle ?? IntPtr.Zero);
             _anim.Show();
+            if (_clock != null) _anim.KeepAboveDesktop(_clock.Handle);
             _anim.SetPaused(ManualPaused || AutoPaused);
         }
         else Native.SetWallpaper(path);
@@ -121,6 +130,27 @@ public sealed class WallpaperManager : IDisposable
     {
         if (ActiveId == null) return;
         try { Apply(ActiveId); } catch (InvalidOperationException) { }
+    }
+
+    public void SetClockEnabled(bool enabled)
+    {
+        if (ClockEnabled == enabled) return;
+        Directory.CreateDirectory(AppPaths.Root);
+        File.WriteAllText(_clockFile, enabled ? "true" : "false");
+        if (enabled) _clock = new DesktopClockWindow(KeepClockAboveDesktop);
+        else
+        {
+            _clock?.Dispose();
+            _clock = null;
+        }
+        ClockEnabled = enabled;
+        Changed?.Invoke();
+    }
+
+    void KeepClockAboveDesktop(IntPtr clockHandle)
+    {
+        if (_anim != null) _anim.KeepAboveDesktop(clockHandle);
+        else Native.KeepAboveProgman(new[] { clockHandle });
     }
 
     /// <summary>Fecha a superfície do GIF durante o autoteste (para não atrapalhar a leitura de pixels).</summary>
@@ -159,5 +189,10 @@ public sealed class WallpaperManager : IDisposable
         File.WriteAllText(_libFile, JsonSerializer.Serialize(new LibraryFile(Items, ActiveId), Json));
     }
 
-    public void Dispose() => CloseAnimated();
+    public void Dispose()
+    {
+        CloseAnimated();
+        _clock?.Dispose();
+        _clock = null;
+    }
 }

@@ -43,14 +43,17 @@ O `frontend/dist` é copiado para `wwwroot/` ao lado do .exe e servido em `https
 ## Protocolo da ponte
 | `type` | `payload` | efeito |
 |---|---|---|
-| `getState` | – | devolve `{ items, activeId, paused, autoPaused, desktopIconsVisible, taskbarVisible }` |
+| `getState` | – | devolve `{ items, activeId, paused, autoPaused, clockEnabled, desktopIconsVisible, taskbarVisible }` |
 | `importUrl` | `{ url }` | baixa com segurança e adiciona à biblioteca |
 | `importLocal` | – | abre o seletor nativo (GIF/PNG/JPG) |
 | `apply` / `remove` | `{ id }` | aplica / exclui |
 | `stop` / `togglePause` | – | restaura o original / pausa manual |
 | `toggleDesktopIcons` / `toggleTaskbar` | – | mostra ou oculta os ícones da área de trabalho / barra de tarefas; ao ocultar, ativa temporariamente o modo de ocultação automática do Windows para liberar a tela. O estado original é restaurado ao sair. Ctrl+Alt+T também alterna a barra de tarefas |
+| `setClockEnabled` | `{ enabled }` | mostra ou oculta um relógio digital centralizado no topo do wallpaper; a preferência é salva |
 
 O backend também emite `{ event: "state", data }` sempre que algo muda (inclusive a pausa automática).
+
+Na seção **Área de trabalho**, ative **Mostrar relógio sobre o wallpaper** para exibir a hora local em formato 24 horas, com segundos, centralizada horizontalmente e a 20 px do topo do monitor principal. O relógio é transparente a cliques e não fica sobre janelas de outros aplicativos.
 
 Em versões recentes do Windows 11 (build 26100 ou superior), o modo automático do GIF usa uma janela de topo porque os encaixes tradicionais em `Progman`/`WorkerW` podem não aparecer. Esse modo pode cobrir os ícones da área de trabalho; os outros encaixes continuam disponíveis no menu da bandeja.
 

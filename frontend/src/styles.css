@@ -25,6 +25,8 @@ input { flex: 1; min-width: 0; background: var(--panel); border: 1px solid var(-
 .hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
 .desktop-settings { margin-top: 24px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; }
 .desktop-settings h2 { margin: 0 0 12px; font-size: 18px; }
+.clock-toggle { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; cursor: pointer; }
+.clock-toggle input { flex: 0 0 auto; width: 16px; height: 16px; accent-color: var(--accent); }
 .desktop-settings .actions { flex-wrap: wrap; }
 .error { margin: 14px 0 0; padding: 10px 12px; border: 1px solid var(--bad); border-radius: 8px; color: var(--bad); }
 .empty { margin-top: 48px; color: var(--muted); max-width: 46ch; }
