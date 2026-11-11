@@ -52,6 +52,7 @@ public static class Native
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
     [DllImport("user32.dll")] static extern bool ShowWindow(IntPtr h, int command);
+    public static void HideWindow(IntPtr h) => ShowWindow(h, 0);
     [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr h);
     [DllImport("user32.dll")] public static extern bool IsZoomed(IntPtr h);
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr h, out RECT r);
@@ -196,16 +197,19 @@ public static class Native
         }
     }
 
-    public static void KeepAboveProgman(IntPtr[] surfaces)
+    public static void KeepAboveProgman(IntPtr[] windows)
     {
         var progman = FindWindow("Progman", null);
-        if (progman == IntPtr.Zero || surfaces.Length == 0) return;
-        if (Array.IndexOf(surfaces, GetWindow(progman, 3 /*GW_HWNDPREV*/)) >= 0) return;
-        foreach (var hwnd in surfaces)
-        {
+        if (progman == IntPtr.Zero || windows.Length == 0) return;
+
+        var ordered = GetWindow(progman, 3 /*GW_HWNDPREV*/) == windows[^1];
+        for (var i = 0; ordered && i < windows.Length - 1; i++)
+            ordered = GetWindow(windows[i], 2 /*GW_HWNDNEXT*/) == windows[i + 1];
+        if (ordered) return;
+
+        foreach (var hwnd in windows)
             SetWindowPos(hwnd, new IntPtr(1), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-            SetWindowPos(progman, hwnd, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-        }
+        SetWindowPos(progman, windows[^1], 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
     public static uint ChildOrPopupStyle(IntPtr parent) => parent == IntPtr.Zero ? 0x90000000u : 0x50000000u; // POPUP|VISIBLE ou CHILD|VISIBLE

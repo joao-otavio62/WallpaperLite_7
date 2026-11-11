@@ -10,7 +10,11 @@ public sealed class DesktopControls : IDisposable
     const int WmHotkey = 0x0312;
     const uint ModControl = 0x0002, ModAlt = 0x0001;
     const uint VirtualKeyT = 0x54;
-    readonly HwndSource _hotkeyWindow = new(new HwndSourceParameters("WallpaperLiteDesktopControls", 0, 0));
+    readonly HwndSource _hotkeyWindow = new(new HwndSourceParameters("WallpaperLiteDesktopControls", 0, 0)
+    {
+        WindowStyle = 0,
+        ExtendedWindowStyle = (int)(Native.WS_EX_TOOLWINDOW | Native.WS_EX_NOACTIVATE),
+    });
     readonly bool _hotkeyRegistered;
     bool? _originalIconsVisible;
     bool? _originalTaskbarAutoHide;
@@ -18,6 +22,7 @@ public sealed class DesktopControls : IDisposable
 
     public DesktopControls()
     {
+        Native.HideWindow(_hotkeyWindow.Handle);
         _hotkeyWindow.AddHook(HandleHotkey);
         _hotkeyRegistered = Native.RegisterHotKey(_hotkeyWindow.Handle, TaskbarHotkeyId, ModControl | ModAlt, VirtualKeyT);
         if (!_hotkeyRegistered) Log.Write("Atalho Ctrl+Alt+T indisponível; não será possível ocultar a barra de tarefas.");
