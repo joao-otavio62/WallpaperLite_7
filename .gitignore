@@ -1,0 +1,6 @@
+node_modules/
+frontend/dist/
+release/
+bin/
+obj/
+.vs/

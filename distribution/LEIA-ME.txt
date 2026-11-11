@@ -1,0 +1,18 @@
+WallpaperLite - Windows x64
+
+COMO INICIAR
+1. Extraia a pasta WallpaperLite-win-x64 do arquivo ZIP para um local de sua escolha.
+2. Execute "Iniciar WallpaperLite.bat".
+
+REQUISITOS
+- Windows 10 ou 11 de 64 bits.
+- Microsoft Edge WebView2 Runtime. Normalmente ja esta instalado no Windows 11.
+  Se o aplicativo informar que o WebView2 esta ausente, instale o Evergreen Runtime
+  pelo site oficial: https://developer.microsoft.com/microsoft-edge/webview2/
+- O .NET nao precisa ser instalado: esta versao inclui o runtime do aplicativo.
+
+OBSERVACOES
+- Mantenha todos os arquivos extraidos juntos; nao execute apenas o arquivo .exe.
+- Ctrl+Alt+T mostra ou oculta a barra de tarefas.
+- Ao ocultar a barra, o app ativa temporariamente a ocultacao automatica do Windows para liberar a tela; a configuracao original e restaurada ao sair normalmente.
+- O aplicativo nao exige privilegios de administrador.
