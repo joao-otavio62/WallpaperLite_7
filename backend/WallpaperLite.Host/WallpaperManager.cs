@@ -107,9 +107,9 @@ public sealed class WallpaperManager : IDisposable
         CloseAnimated();
         if (it.Kind == "gif")
         {
-            _anim = new AnimatedWallpaperWindow(path, () => _clock?.Handle ?? IntPtr.Zero);
+            _anim = new AnimatedWallpaperWindow(path, () => _clock?.Handles ?? Array.Empty<IntPtr>());
             _anim.Show();
-            if (_clock != null) _anim.KeepAboveDesktop(_clock.Handle);
+            if (_clock != null) _anim.KeepAboveDesktop(_clock.Handles);
             _anim.SetPaused(ManualPaused || AutoPaused);
         }
         else Native.SetWallpaper(path);
@@ -147,10 +147,10 @@ public sealed class WallpaperManager : IDisposable
         Changed?.Invoke();
     }
 
-    void KeepClockAboveDesktop(IntPtr clockHandle)
+    void KeepClockAboveDesktop(IntPtr[] clockHandles)
     {
-        if (_anim != null) _anim.KeepAboveDesktop(clockHandle);
-        else Native.KeepAboveProgman(new[] { clockHandle });
+        if (_anim != null) _anim.KeepAboveDesktop(clockHandles);
+        else Native.KeepAboveProgman(clockHandles);
     }
 
     /// <summary>Fecha a superfície do GIF durante o autoteste (para não atrapalhar a leitura de pixels).</summary>

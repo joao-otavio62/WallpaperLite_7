@@ -53,7 +53,7 @@ O `frontend/dist` é copiado para `wwwroot/` ao lado do .exe e servido em `https
 
 O backend também emite `{ event: "state", data }` sempre que algo muda (inclusive a pausa automática).
 
-Na seção **Área de trabalho**, ative **Mostrar relógio sobre o wallpaper** para exibir a hora local em formato 24 horas, com segundos, centralizada horizontalmente e a 20 px do topo do monitor principal. O relógio é transparente a cliques e não fica sobre janelas de outros aplicativos.
+Na seção **Área de trabalho**, ative **Mostrar relógio sobre o wallpaper** para exibir a hora local em formato 24 horas, com segundos, centralizada horizontalmente e a 20 px do topo de cada monitor. O relógio é transparente a cliques e não fica sobre janelas de outros aplicativos.
 
 Em versões recentes do Windows 11 (build 26100 ou superior), o modo automático do GIF usa uma janela de topo porque os encaixes tradicionais em `Progman`/`WorkerW` podem não aparecer. Esse modo pode cobrir os ícones da área de trabalho; os outros encaixes continuam disponíveis no menu da bandeja.
 
