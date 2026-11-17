@@ -43,9 +43,10 @@ public sealed class DesktopControls : IDisposable
     {
         if (TaskbarVisible && !_hotkeyRegistered)
             throw new InvalidOperationException("Não foi possível registrar Ctrl+Alt+T; a barra de tarefas não será ocultada.");
+
         var autoHide = Native.IsTaskbarAutoHideEnabled;
         _originalTaskbarAutoHide ??= autoHide;
-        if (!Native.SetTaskbarAutoHideEnabled(!autoHide))
+        if (!Native.SetTaskbarAutoHideEnabled(!autoHide, _hotkeyWindow.Handle))
             throw new InvalidOperationException("Não foi possível alterar a visibilidade da barra de tarefas.");
         Changed?.Invoke();
     }
@@ -75,12 +76,12 @@ public sealed class DesktopControls : IDisposable
     {
         if (_disposed) return;
         _disposed = true;
+        if (_originalTaskbarAutoHide.HasValue &&
+            !Native.SetTaskbarAutoHideEnabled(_originalTaskbarAutoHide.Value, _hotkeyWindow.Handle))
+            Log.Write("Não foi possível restaurar a configuração original de ocultação da barra de tarefas.");
         if (_hotkeyRegistered) Native.UnregisterHotKey(_hotkeyWindow.Handle, TaskbarHotkeyId);
         _hotkeyWindow.Dispose();
         Restore(_originalIconsVisible, Native.GetDesktopIconViews(), "ícones da área de trabalho");
-        if (_originalTaskbarAutoHide.HasValue &&
-            !Native.SetTaskbarAutoHideEnabled(_originalTaskbarAutoHide.Value))
-            Log.Write("Não foi possível restaurar a configuração original de ocultação da barra de tarefas.");
     }
 
     static void Restore(bool? visibility, IntPtr[] windows, string target)

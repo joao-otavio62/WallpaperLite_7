@@ -81,7 +81,7 @@ export default function App() {
             {st.taskbarVisible === false ? 'Mostrar barra de tarefas' : 'Ocultar barra de tarefas'}
           </button>
         </div>
-        <p className="hint">Ao ocultar, o WallpaperLite libera a tela usando a ocultação automática do Windows; mova o mouse até a borda inferior para exibir a barra. O estado original é restaurado ao sair. Use Ctrl+Alt+T para alternar a barra.</p>
+        <p className="hint">Ao ocultar, o WallpaperLite ativa a opção nativa de ocultação automática do Windows; mova o mouse até a borda inferior para exibir a barra. A configuração original é restaurada ao sair. Use Ctrl+Alt+T para alternar.</p>
       </section>
       <p className="hint">Aceita GIF, PNG e JPG de até 20 MB. Links precisam começar com https://.</p>
       {error && <p className="error" role="alert">{error}</p>}

@@ -48,7 +48,7 @@ O `frontend/dist` é copiado para `wwwroot/` ao lado do .exe e servido em `https
 | `importLocal` | – | abre o seletor nativo (GIF/PNG/JPG) |
 | `apply` / `remove` | `{ id }` | aplica / exclui |
 | `stop` / `togglePause` | – | restaura o original / pausa manual |
-| `toggleDesktopIcons` / `toggleTaskbar` | – | mostra ou oculta os ícones da área de trabalho / barra de tarefas; ao ocultar, ativa temporariamente o modo de ocultação automática do Windows para liberar a tela. O estado original é restaurado ao sair. Ctrl+Alt+T também alterna a barra de tarefas |
+| `toggleDesktopIcons` / `toggleTaskbar` | – | mostra ou oculta os ícones da área de trabalho / barra de tarefas; ao ocultar, ativa temporariamente o modo nativo de ocultação automática do Windows para liberar a tela. O estado original é restaurado ao sair. Ctrl+Alt+T também alterna a barra de tarefas. |
 | `setClockEnabled` | `{ enabled }` | mostra ou oculta um relógio digital centralizado no topo do wallpaper; a preferência é salva |
 
 O backend também emite `{ event: "state", data }` sempre que algo muda (inclusive a pausa automática).

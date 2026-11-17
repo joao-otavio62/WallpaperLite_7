@@ -93,12 +93,15 @@ public static class Native
         }
     }
 
-    public static bool SetTaskbarAutoHideEnabled(bool enabled)
+    public static bool SetTaskbarAutoHideEnabled(bool enabled, IntPtr appbarWindow)
     {
+        if (appbarWindow == IntPtr.Zero) return false;
+
         var state = GetTaskbarState();
         var data = new APPBARDATA
         {
             cbSize = (uint)Marshal.SizeOf<APPBARDATA>(),
+            hWnd = appbarWindow,
             lParam = new IntPtr(enabled ? state | AbsAutoHide : state & ~AbsAutoHide),
         };
         SHAppBarMessage(AbmSetState, ref data);
