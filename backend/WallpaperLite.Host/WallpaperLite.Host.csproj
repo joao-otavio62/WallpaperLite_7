@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <AssemblyName>WallpaperLite</AssemblyName>
+    <ApplicationIcon>Assets\lite.ico</ApplicationIcon>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -14,6 +16,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.*" />
     <PackageReference Include="SkiaSharp" Version="3.116.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\lite.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
   <!-- Copia o build do frontend (frontend/dist) para <saída>/wwwroot -->
   <ItemGroup Condition="Exists('..\..\frontend\dist')">

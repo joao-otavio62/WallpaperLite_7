@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
@@ -25,6 +26,10 @@ public sealed class MainWindow : Window
     {
         _s = s;
         Title = "WallpaperLite";
+        Icon = BitmapFrame.Create(
+            new Uri(Path.Combine(AppContext.BaseDirectory, "Assets", "lite.ico"), UriKind.Absolute),
+            BitmapCreateOptions.None,
+            BitmapCacheOption.OnLoad);
         Width = 980; Height = 680; MinWidth = 720; MinHeight = 480;
         Background = new SolidColorBrush(Color.FromRgb(0x18, 0x1A, 0x26));
         Content = _web;
@@ -58,7 +63,7 @@ public sealed class MainWindow : Window
             if (e.IsSuccess || _failShown) return;
             _failShown = true;
             c.NavigateToString("<body style='font:16px Segoe UI;background:#181a26;color:#eee;padding:32px'><h2>Interface não encontrada</h2>"
-                + "<p>Use o run.bat (ele gera o frontend e abre o programa). Em Debug, rode <code>npm run dev</code> na pasta frontend.</p></body>");
+                + "<p>Confira se a pasta <code>wwwroot</code> está ao lado de WallpaperLite.exe. Em Debug, rode <code>npm run dev</code> na pasta frontend.</p></body>");
         };
 
         c.SetVirtualHostNameToFolderMapping(ThumbHost, AppPaths.Thumbs, CoreWebView2HostResourceAccessKind.Allow);

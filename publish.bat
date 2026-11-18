@@ -13,13 +13,13 @@ call npm run build
 if errorlevel 1 goto :err_frontend
 popd
 
-echo Publicando o aplicativo autocontido para Windows x64...
+echo Publicando WallpaperLite.exe autocontido para Windows x64...
+if exist "%PUBLISH_DIR%" rmdir /S /Q "%PUBLISH_DIR%"
+mkdir "%PUBLISH_DIR%"
 dotnet publish "%~dp0backend\WallpaperLite.Host\WallpaperLite.Host.csproj" -c Release -r win-x64 --self-contained true -p:UseAppHost=true -o "%PUBLISH_DIR%"
 if errorlevel 1 goto :err_publish
 
 copy /Y "%~dp0distribution\LEIA-ME.txt" "%PUBLISH_DIR%\LEIA-ME.txt" >nul
-if errorlevel 1 goto :err_publish
-copy /Y "%~dp0distribution\Iniciar WallpaperLite.bat" "%PUBLISH_DIR%\Iniciar WallpaperLite.bat" >nul
 if errorlevel 1 goto :err_publish
 
 if exist "%ARCHIVE%" del /Q "%ARCHIVE%"

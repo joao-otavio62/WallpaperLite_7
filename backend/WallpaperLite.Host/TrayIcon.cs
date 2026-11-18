@@ -10,6 +10,7 @@ namespace WallpaperLite;
 public sealed class TrayIcon : IDisposable
 {
     readonly NotifyIcon _icon;
+    readonly Icon _iconImage;
     readonly AppServices _s;
     MainWindow? _window;
 
@@ -57,7 +58,8 @@ public sealed class TrayIcon : IDisposable
         menu.Items.Add("-");
         menu.Items.Add("Sair", null, (_, _) => System.Windows.Application.Current.Shutdown());
 
-        _icon = new NotifyIcon { Icon = SystemIcons.Application, Text = "WallpaperLite", Visible = true, ContextMenuStrip = menu };
+        _iconImage = new Icon(Path.Combine(AppContext.BaseDirectory, "Assets", "lite.ico"));
+        _icon = new NotifyIcon { Icon = _iconImage, Text = "WallpaperLite", Visible = true, ContextMenuStrip = menu };
         _icon.DoubleClick += (_, _) => ShowMainWindow();
     }
 
@@ -94,5 +96,10 @@ public sealed class TrayIcon : IDisposable
         _window.Show();
     }
 
-    public void Dispose() { _icon.Visible = false; _icon.Dispose(); }
+    public void Dispose()
+    {
+        _icon.Visible = false;
+        _icon.Dispose();
+        _iconImage.Dispose();
+    }
 }

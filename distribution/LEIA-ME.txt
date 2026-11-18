@@ -2,7 +2,7 @@ WallpaperLite - Windows x64
 
 COMO INICIAR
 1. Extraia a pasta WallpaperLite-win-x64 do arquivo ZIP para um local de sua escolha.
-2. Execute "Iniciar WallpaperLite.bat".
+2. Execute "WallpaperLite.exe".
 
 REQUISITOS
 - Windows 10 ou 11 de 64 bits.
@@ -12,7 +12,8 @@ REQUISITOS
 - O .NET nao precisa ser instalado: esta versao inclui o runtime do aplicativo.
 
 OBSERVACOES
-- Mantenha todos os arquivos extraidos juntos; nao execute apenas o arquivo .exe.
+- Mantenha todos os arquivos extraidos juntos, incluindo a pasta wwwroot.
+- Nao e necessario usar um arquivo .bat para iniciar o aplicativo.
 - Ctrl+Alt+T mostra ou oculta a barra de tarefas.
 - Ao ocultar, o app ativa a ocultacao automatica nativa do Windows; mova o mouse ate a borda inferior para exibir a barra. A configuracao original e restaurada ao sair normalmente.
 - O aplicativo nao exige privilegios de administrador.

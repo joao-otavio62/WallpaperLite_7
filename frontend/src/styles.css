@@ -6,6 +6,8 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--ink); color: var(--text); font: 15px/1.5 "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
 main { max-width: 980px; margin: 0 auto; padding: 28px 28px 48px; }
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: .04em; }
+.brand img { width: 32px; height: 32px; object-fit: contain; border-radius: 7px; }
 button, input { font: inherit; color: inherit; }
 button { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
 button:hover:not(:disabled) { border-color: var(--muted); }

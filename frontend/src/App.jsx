@@ -31,10 +31,14 @@ export default function App() {
 
   return (
     <main>
+      <div className="brand">
+        <img src="/wallpaperlite.ico" alt="" />
+        <span>WallpaperLite</span>
+      </div>
       {isDemo && (
         <p className="demo" role="status">
           Modo demonstração: esta página está aberta no navegador e não altera o wallpaper do PC.
-          Abra o programa com o run.bat.
+          Abra o aplicativo WallpaperLite.exe.
         </p>
       )}
       <header className="now">
