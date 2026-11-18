@@ -3,7 +3,7 @@ import { call, onEvent, isDemo } from './bridge';
 import './styles.css';
 
 export default function App() {
-  const [st, setSt] = useState({ items: [], activeId: null, paused: false, autoPaused: false, clockEnabled: false });
+  const [st, setSt] = useState({ items: [], activeId: null, paused: false, autoPaused: false, clockEnabled: false, startWithWindows: false });
   const [url, setUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -68,7 +68,7 @@ export default function App() {
       </section>
       <section className="desktop-settings" aria-label="Configurações da área de trabalho">
         <h2>Área de trabalho</h2>
-        <label className="clock-toggle">
+        <label className="setting-toggle">
           <input
             type="checkbox"
             checked={Boolean(st.clockEnabled)}
@@ -86,6 +86,19 @@ export default function App() {
           </button>
         </div>
         <p className="hint">Ao ocultar, o WallpaperLite ativa a opção nativa de ocultação automática do Windows; mova o mouse até a borda inferior para exibir a barra. A configuração original é restaurada ao sair. Use Ctrl+Alt+T para alternar.</p>
+      </section>
+      <section className="desktop-settings" aria-label="Configurações de inicialização">
+        <h2>Inicialização</h2>
+        <label className="setting-toggle">
+          <input
+            type="checkbox"
+            checked={Boolean(st.startWithWindows)}
+            onChange={(e) => run(async () => setSt(await call('setStartWithWindows', { enabled: e.target.checked })))}
+            disabled={busy}
+          />
+          <span>Iniciar com o Windows na bandeja de aplicativos</span>
+        </label>
+        <p className="hint">O WallpaperLite será iniciado em segundo plano quando você entrar no Windows. Abra-o pelo ícone na bandeja, perto do relógio.</p>
       </section>
       <p className="hint">Aceita GIF, PNG e JPG de até 20 MB. Links precisam começar com https://.</p>
       {error && <p className="error" role="alert">{error}</p>}

@@ -47,6 +47,7 @@ O executável gerado é `WallpaperLite.exe`. O `frontend/dist` é copiado para `
 | `stop` / `togglePause` | – | restaura o original / pausa manual |
 | `toggleDesktopIcons` / `toggleTaskbar` | – | mostra ou oculta os ícones da área de trabalho / barra de tarefas; ao ocultar, ativa temporariamente o modo nativo de ocultação automática do Windows para liberar a tela. O estado original é restaurado ao sair. Ctrl+Alt+T também alterna a barra de tarefas. |
 | `setClockEnabled` | `{ enabled }` | mostra ou oculta um relógio digital centralizado no topo do wallpaper; a preferência é salva |
+| `setStartWithWindows` | `{ enabled }` | inicia o WallpaperLite na bandeja quando o usuário entra no Windows |
 
 O backend também emite `{ event: "state", data }` sempre que algo muda (inclusive a pausa automática).
 
@@ -59,5 +60,7 @@ Em versões recentes do Windows 11 (build 26100 ou superior), o modo automático
 - **Pausa**: apenas manual; a pausa automática por bateria, tela cheia ou janela maximizada está desativada.
 - **Segurança**: magic numbers, nome de arquivo GUID, só `https://`, bloqueio de IPs internos no `ConnectCallback` (também vale para redirecionamentos, que são seguidos manualmente, máx. 3), HEAD + limite rígido de 20 MB durante o stream, manifesto `asInvoker`, WebView2 restrito a `app.local` + CSP no build, mensagens de erro sem detalhes internos.
 
+Na seção **Inicialização**, ative **Iniciar com o Windows na bandeja de aplicativos** para abrir o WallpaperLite em segundo plano ao entrar no Windows. O ícone da bandeja permite abrir a janela principal.
+
 ## Próximos passos sugeridos
-Iniciar com o Windows (`--tray` já é suportado), multi-monitor, ícone próprio na bandeja.
+Multi-monitor.

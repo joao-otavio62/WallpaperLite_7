@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +55,7 @@ public sealed class WebBridge : IDisposable
             autoPaused = w.AutoPaused,
             autoReason = w.AutoReason,
             clockEnabled = w.ClockEnabled,
+            startWithWindows = StartupRegistration.IsEnabled,
             desktopIconsVisible = _s.Desktop.DesktopIconsVisible,
             taskbarVisible = _s.Desktop.TaskbarVisible,
         };
@@ -82,6 +85,10 @@ public sealed class WebBridge : IDisposable
                 case "toggleDesktopIcons": _s.Desktop.ToggleDesktopIcons(); break;
                 case "toggleTaskbar": _s.Desktop.ToggleTaskbar(); break;
                 case "setClockEnabled": w.SetClockEnabled(BoolArg(root, "enabled")); break;
+                case "setStartWithWindows":
+                    StartupRegistration.SetEnabled(BoolArg(root, "enabled"));
+                    data = Snapshot();
+                    break;
                 default: throw new InvalidOperationException("Comando desconhecido.");
             }
             Post(new { id, ok = true, data });
@@ -93,6 +100,7 @@ public sealed class WebBridge : IDisposable
             {
                 InvalidOperationException => ex.Message,
                 HttpRequestException or TaskCanceledException => "Não foi possível baixar o link.",
+                IOException or UnauthorizedAccessException or SecurityException => "Não foi possível alterar a inicialização do Windows.",
                 _ => "Erro inesperado.",
             };
             Post(new { id, ok = false, error = msg });
